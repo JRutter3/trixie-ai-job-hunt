@@ -1,0 +1,29 @@
+[project]
+name = "trixie-ai-job-hunt"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "ezgmail>=2026.3.6",
+    "loguru>=0.7.3",
+]
+
+[tool.ruff]
+target-version = "py313"
+select = [
+    "F",    # Pyflakes (The absolute basics)
+    "E",    # pycodestyle errors
+    "W",    # pycodestyle warnings
+    "I",    # isort (Keeps your imports clean automatically)
+    "B",    # flake8-bugbear (Catches common logic traps)
+    "UP",   # pyupgrade (Ensures you use modern 2026 Python syntax)
+    "SIM",  # flake8-simplify (Helps you write cleaner, less nested code)
+    "S",    # flake8-bandit (Security: catches hardcoded passwords/unsecured APIs)
+    "T20",  # flake8-print (Removes prints—crucial for a clean Cloud Run log)
+    "RUF",  # Ruff-specific rules (Catches things even Flake8 misses)
+]
+
+[tool.pyright]
+pythonVersion = "3.13"
+strict = ["src"]
