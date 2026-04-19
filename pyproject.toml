@@ -23,7 +23,8 @@ select = [
     "T20",  # flake8-print (Removes prints—crucial for a clean Cloud Run log)
     "RUF",  # Ruff-specific rules (Catches things even Flake8 misses)
 ]
-
+exclude = ["typings"]
 [tool.pyright]
 pythonVersion = "3.13"
 strict = ["src"]
+ignore = ["./typings"]

@@ -9,7 +9,7 @@ To minimize "recruitment noise" by applying architectural rigor to the job searc
 This project is built as a **Modular Monolith** designed for stateless execution on **Google Cloud Run Jobs**.
 
 - **Ingest:** EZGmail poller for LinkedIn/Email outreach.
-- **Brain:** LLM-based (Claude 4.7) intent classification and scoring.
+- **Brain:** LLM-based (Claude) intent classification and scoring.
 - **Data:** PostgreSQL (Sovereign leads) + Secret Manager (OAuth tokens).
 - **Notify:** GroupMe/Email alerts for Tier 1 leads.
 
