@@ -15,6 +15,9 @@ COPY ./src /app/src
 COPY ./pyproject.toml /app/pyproject.toml
 COPY ./uv.lock /app/uv.lock
 # NOTE - there might be some config also, but we will handle that later.
+COPY ./cfg /app/cfg
+
+ENV sys_prompt_path="/app/cfg/recruiter_prompt.txt"
 
 WORKDIR /app
 RUN uv sync --frozen --no-dev
