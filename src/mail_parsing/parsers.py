@@ -9,29 +9,38 @@ import ezgmail
 from data_models.mail_models import MailMessage
 
 LINKEDIN_MAILER_FROM = "inmail-hit-reply"
+
+
 class MailParserBase(ABC):
     """Baseclass for Mail parsers.
 
     This class acts as an interface definition for mail parsers. This interface makes
     for potential ease of expansion to other email clients.
     """
+
     @abstractmethod
     def parse_mail(self, oldest_datetime: dt.datetime) -> list[MailMessage]:
         """Parse MailMessages from the mail service."""
         ...
 
+
 # If we go to a bunch of different classes, we should move this into a dedicated file.
 class GMailParser(MailParserBase):
     """Gmail implementation of MailParser"""
-    UNREAD_LABEL="UNREAD"
-    def __init__(self):
+
+    UNREAD_LABEL = "UNREAD"
+
+    def __init__(self, dry_run: bool = False):
         ezgmail.init()
         self._email_user: str = ezgmail.EMAIL_ADDRESS
+        self._dry_run = dry_run
 
     def parse_mail(self, oldest_datetime: dt.date) -> list[MailMessage]:
         """Parse the inbox and return a list of MailMessages for processing."""
         raw_threads = self._fetch_unread_threads(oldest_datetime)
-        result = list(self._thread_to_mail_msg(raw_threads, mark_as_read=True))
+        result = list(
+            self._thread_to_mail_msg(raw_threads, mark_as_read=not self._dry_run)
+        )
         return result
 
     @staticmethod
@@ -43,8 +52,7 @@ class GMailParser(MailParserBase):
 
     @staticmethod
     def _build_search_query(
-        sender: str | None = None,
-        oldest_date: dt.date | None = None
+        sender: str | None = None, oldest_date: dt.date | None = None
     ) -> str:
         query_components: list[str] = [f"label:{GMailParser.UNREAD_LABEL}"]
         # Append the sender query:
@@ -58,8 +66,7 @@ class GMailParser(MailParserBase):
 
     @staticmethod
     def _thread_to_mail_msg(
-        gmail_threads: Iterable[ezgmail.GmailThread],
-        mark_as_read: bool = False
+        gmail_threads: Iterable[ezgmail.GmailThread], mark_as_read: bool = False
     ) -> Generator[MailMessage]:
         for thread in gmail_threads:
             top_msg = thread.messages[0]
@@ -69,7 +76,7 @@ class GMailParser(MailParserBase):
                 cc=None,
                 subject=top_msg.subject,
                 body=top_msg.body,
-                timestamp=top_msg.timestamp
+                timestamp=top_msg.timestamp,
             )
             if mark_as_read:
                 top_msg.markAsRead()
