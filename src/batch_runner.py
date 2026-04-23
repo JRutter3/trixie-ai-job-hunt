@@ -4,11 +4,11 @@
 import datetime as dt
 
 from loguru import logger
-from pprint import pprint
 
 from ai_interop.ai_submision import MailCategorizer
 from data_models.config_models import AppConfig
 from mail_parsing.parsers import GMailParser, MailParserBase
+from notifications.gm_notify import summarize_and_post
 
 
 class TrixieJob:
@@ -21,6 +21,8 @@ class TrixieJob:
             cfg.ai_model, cfg.api_key, cfg.sys_prompt_path
         )
         self._oldest_date = dt.datetime.now() - dt.timedelta(days=7)
+        self._bot_id = cfg.gm_bot_id
+        self._template_path = cfg.summary_template_path
 
     async def run_job(self):
         """Executes the TrixieJob."""
@@ -31,8 +33,7 @@ class TrixieJob:
         logger.info("{} E-Mails found. Categorizing...", len(mails))
         categorized_results = await self._categorizer.categorize_mails(mails)
         # Step 3: Notify of results
-        for cat in categorized_results.values():
-            for m, c in cat:
-                pprint((c.tier, c.reasoning, m.sender))
+        logger.info("Generating summary and sending to chat...")
+        summarize_and_post(categorized_results, self._template_path, self._bot_id)
         #   NOTE: Step 3 will likely evolve to "store results" and the notification will
         #   run as a separate batch for summaries etc.

@@ -1,0 +1,8 @@
+Daily Recruiter Summary:
+========================
+{s_tier}
+========================
+{a_tier}
+========================
+General Interest: {b_count} messages
+Noise: {c_count} messages

@@ -8,8 +8,10 @@ from pydantic_settings import BaseSettings
 
 class AppConfig(BaseSettings):
     api_key: str
+    gm_bot_id: str
     ai_model: str
     sys_prompt_path: Path
+    summary_template_path: Path
 
 
 def parse_config(config_location: Path) -> AppConfig:
