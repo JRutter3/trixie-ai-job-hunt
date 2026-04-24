@@ -27,3 +27,6 @@ steps:
 # This tells GCP to keep these images in your private registry
 images:
   - 'gcr.io/$PROJECT_ID/trixie-ai-job-hunt:$SHORT_SHA'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
