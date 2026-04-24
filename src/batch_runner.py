@@ -16,7 +16,11 @@ class TrixieJob:
 
     def __init__(self, cfg: AppConfig, dry_run: bool = False):
         """Initializes a TrixieJob"""
-        self._mail_parser: MailParserBase = GMailParser(dry_run=dry_run)
+        self._mail_parser: MailParserBase = GMailParser(
+            creds_str=cfg.gmail_credentials_json,
+            token_str=cfg.gmail_token_json,
+            dry_run=dry_run,
+        )
         self._categorizer = MailCategorizer(
             cfg.ai_model, cfg.api_key, cfg.sys_prompt_path
         )
@@ -37,3 +41,4 @@ class TrixieJob:
         summarize_and_post(categorized_results, self._template_path, self._bot_id)
         #   NOTE: Step 3 will likely evolve to "store results" and the notification will
         #   run as a separate batch for summaries etc.
+        logger.info("FIN")
