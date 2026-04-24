@@ -12,6 +12,8 @@ class AppConfig(BaseSettings):
     ai_model: str
     sys_prompt_path: Path
     summary_template_path: Path
+    gmail_credentials_json: str
+    gmail_token_json: str
 
 
 def parse_config(config_location: Path) -> AppConfig:

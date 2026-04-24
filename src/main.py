@@ -26,7 +26,9 @@ def main(args: Sequence[str] | None = None) -> int:
             "Scan the e-mails but do not send any notifications or make any db commits"
         ),
     )
-    parsed_args = parser.parse_args()
+    parsed_args, extras = parser.parse_known_args()
+    # Google auth gets all peeved if it sees unknown args, so we strip ours out.
+    sys.argv = [sys.argv[0], *extras]
     config_location = os.getenv("CONFIG_PATH")
     if config_location is None:
         raise ValueError("No config location given.")
