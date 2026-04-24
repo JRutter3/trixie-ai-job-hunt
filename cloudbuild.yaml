@@ -1,0 +1,29 @@
+steps:
+  # Step 1: Build the container image using Docker
+  # We tag it with the commit SHA so we have a clear version history
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$PROJECT_ID/trixie-ai-job-hunt:$SHORT_SHA', '.']
+
+  # Step 2: Push that image to Google's Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$PROJECT_ID/trixie-ai-job-hunt:$SHORT_SHA']
+
+  # Step 3: Update the Cloud Run Job with the new image
+  # This "points" the job at the new code without changing its secrets/configs
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    entrypoint: gcloud
+    args:
+      - 'run'
+      - 'jobs'
+      - 'update'
+      - 'recruiter-job'
+      - '--image'
+      - 'gcr.io/$PROJECT_ID/trixie-ai-job-hunt:$SHORT_SHA'
+      - '--region'
+      - 'us-central1'
+      - '--set-secrets'
+      - 'GMAIL_TOKEN_JSON=GMAIL_TOKEN_JSON:latest,GMAIL_CREDENTIALS_JSON=GMAIL_CREDENTIALS_JSON:latest,API_KEY=OPENROUTER_API_KEY:latest,GM_BOT_ID=TRIXIE_GM_BOT_ID:latest'
+
+# This tells GCP to keep these images in your private registry
+images:
+  - 'gcr.io/$PROJECT_ID/trixie-ai-job-hunt:$SHORT_SHA'
