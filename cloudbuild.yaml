@@ -21,6 +21,8 @@ steps:
       - 'gcr.io/$PROJECT_ID/trixie-ai-job-hunt:$SHORT_SHA'
       - '--region'
       - 'us-east5'
+      - '--set-env-vars'
+      - 'CONFIG_PATH=/app/cfg/app_config.toml'
       - '--set-secrets'
       - 'GMAIL_TOKEN_JSON=GMAIL_TOKEN_JSON:latest,GMAIL_CREDENTIALS_JSON=GMAIL_CREDENTIALS_JSON:latest,API_KEY=OPENROUTER_API_KEY:latest,GM_BOT_ID=TRIXIE_GM_BOT_ID:latest'
 

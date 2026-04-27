@@ -10,8 +10,8 @@ class AppConfig(BaseSettings):
     api_key: str
     gm_bot_id: str
     ai_model: str
-    sys_prompt_path: Path
-    summary_template_path: Path
+    sys_prompt_path: Path = Path("/app/cfg/recruiter_prompt.txt")
+    summary_template_path: Path = Path("/app/cfg/summary_template.txt")
     gmail_credentials_json: str
     gmail_token_json: str
 

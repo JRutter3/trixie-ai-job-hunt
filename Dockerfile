@@ -21,4 +21,4 @@ ENV sys_prompt_path="/app/cfg/recruiter_prompt.txt"
 
 WORKDIR /app
 RUN uv sync --frozen --no-dev
-CMD ["python", "/app/src/main.py"]
+CMD ["uv", "run", "--no-dev", "python", "/app/src/main.py"]
