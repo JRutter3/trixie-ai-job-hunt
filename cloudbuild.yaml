@@ -1,14 +1,24 @@
 steps:
-  # Step 1: Build the container image using Docker
+  # Step 1: Install dependencies and run tests
+  - name: 'python:3.13-slim'
+    id: 'Run Tests'
+    entrypoint: 'bash'
+    args:
+      - '-c'
+      - |
+        pip install uv
+        uv sync --dev
+        uv run pytest tests/
+  # Step 2: Build the container image using Docker
   # We tag it with the commit SHA so we have a clear version history
   - name: 'gcr.io/cloud-builders/docker'
     args: ['build', '-t', 'gcr.io/$PROJECT_ID/trixie-ai-job-hunt:$SHORT_SHA', '.']
 
-  # Step 2: Push that image to Google's Registry
+  # Step 3: Push that image to Google's Registry
   - name: 'gcr.io/cloud-builders/docker'
     args: ['push', 'gcr.io/$PROJECT_ID/trixie-ai-job-hunt:$SHORT_SHA']
 
-  # Step 3: Update the Cloud Run Job with the new image
+  # Step 4: Update the Cloud Run Job with the new image
   # This "points" the job at the new code without changing its secrets/configs
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
     entrypoint: gcloud

@@ -39,14 +39,14 @@ def build_summary(
         summary_template = f.read()
 
     t1_chunk = f"{TIER_LABEL_MAP[MsgTier.TIER_1_SOVEREIGN]}:\n" + _build_tier_component(
-        msg_data[MsgTier.TIER_1_SOVEREIGN]
+        msg_data.get(MsgTier.TIER_1_SOVEREIGN, [])
     )
     t2_chunk = (
         f"{TIER_LABEL_MAP[MsgTier.TIER_2_HIGH_SIGNAL]}:\n"
-        + _build_tier_component(msg_data[MsgTier.TIER_2_HIGH_SIGNAL])
+        + _build_tier_component(msg_data.get(MsgTier.TIER_2_HIGH_SIGNAL, []))
     )
-    t3_count = len(msg_data[MsgTier.TIER_3_GENERAL])
-    t4_count = len(msg_data[MsgTier.TIER_4_NOISE])
+    t3_count = len(msg_data.get(MsgTier.TIER_3_GENERAL, []))
+    t4_count = len(msg_data.get(MsgTier.TIER_4_NOISE, []))
 
     return summary_template.format(
         s_tier=t1_chunk, a_tier=t2_chunk, b_count=t3_count, c_count=t4_count
