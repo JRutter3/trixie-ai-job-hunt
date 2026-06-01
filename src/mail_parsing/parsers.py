@@ -19,6 +19,7 @@ from data_models.mail_models import MailMessage
 # GMailParser._initialize_ezgmail
 
 LINKEDIN_MAILER_FROM = "inmail-hit-reply"
+JOBHUNT_LABEL = "Job-Hunting"
 CREDS_LOCATION = Path()
 
 if TYPE_CHECKING:
@@ -129,7 +130,7 @@ class GMailParser(MailParserBase):
     def _build_search_query(
         sender: str | None = None, oldest_date: dt.date | None = None
     ) -> str:
-        query_components: list[str] = [f"label:{GMailParser.UNREAD_LABEL}"]
+        query_components: list[str] = [f"label:{GMailParser.UNREAD_LABEL} | label:{JOBHUNT_LABEL}"]
         # Append the sender query:
         if sender:
             query_components.append(f"from:{sender}")
